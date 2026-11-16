@@ -27,12 +27,12 @@
       buildFilters();
       render();
       grid.setAttribute("aria-busy","false");
-      if (!state.cases.length) showState("No valid cases yet. Add a case to data/cases.json to begin.");
+      if (!state.cases.length) showState("目前沒有有效案例。請在 data/cases.json 新增案例。");
     } catch (error) {
       console.error(error);
       grid.setAttribute("aria-busy","false");
-      $("#result-count").textContent = "CASE DATA UNAVAILABLE";
-      showState("Could not load data/cases.json. Run this project from a local static server or GitHub Pages.");
+      $("#result-count").textContent = "無法載入案例資料";
+      showState("無法載入 data/cases.json。請以本機靜態伺服器或 GitHub Pages 開啟此網站。");
     }
   }
   function casePatterns(item) { return uniq([...item.components, ...item.reusable_patterns.map((pattern)=>pattern.name)]); }
@@ -42,9 +42,9 @@
     if (values.includes(selected)) select.value = selected;
   }
   function buildFilters() {
-    fillFilter(typeFilter,"Website type",uniq(state.cases.map((item)=>item.website_type)));
-    fillFilter(styleFilter,"Design style",uniq(state.cases.flatMap((item)=>item.design_styles)));
-    fillFilter(patternFilter,"UI pattern",uniq(state.cases.flatMap(casePatterns)));
+    fillFilter(typeFilter,"網站類型",uniq(state.cases.map((item)=>item.website_type)));
+    fillFilter(styleFilter,"設計風格",uniq(state.cases.flatMap((item)=>item.design_styles)));
+    fillFilter(patternFilter,"UI Pattern",uniq(state.cases.flatMap(casePatterns)));
   }
   function searchableText(item) {
     return [item.name,item.website_type,...item.design_styles,...item.components,...item.reusable_patterns.flatMap((pattern)=>Object.values(pattern)),...item.use_cases,...item.tags].flat(Infinity).join(" ").toLocaleLowerCase();
@@ -56,35 +56,55 @@
   function render() {
     const filtered = getFilteredCases();
     $("#hero-count").textContent = String(state.cases.length).padStart(2,"0");
-    $("#result-count").textContent = `${String(filtered.length).padStart(2,"0")} ${filtered.length === 1 ? "CASE" : "CASES"} / ${String(state.cases.length).padStart(2,"0")} IN ARCHIVE`;
+    $("#result-count").textContent = `${String(filtered.length).padStart(2,"0")} 個案例 / 共 ${String(state.cases.length).padStart(2,"0")} 個`;
     const hasFilters = !!(state.query || state.type || state.style || state.pattern);
     $("#reset-filters").hidden = !hasFilters;
     grid.innerHTML = filtered.map(cardHTML).join("");
-    if (!filtered.length) showState(hasFilters ? "No cases match this search. Try another term or reset the filters." : "No cases yet. Add the first case to data/cases.json.");
+    if (!filtered.length) showState(hasFilters ? "找不到符合條件的案例，請更換關鍵字或重設篩選。" : "目前沒有案例，請在 data/cases.json 新增第一筆案例。");
     else hideState();
+  }
+  function uniqueInOrder(values) { return [...new Set(values.filter((value)=>typeof value === "string" && value.trim()))]; }
+  function cardPatternItems(item) {
+    const items = [...item.components, ...item.reusable_patterns.map((pattern)=>pattern.name)];
+    const visual = /hero|campaign|bento|mosaic/i;
+    const interaction = /cta|pricing|dashboard|command|sidebar|search|filter/i;
+    return uniqueInOrder([...items.filter((value)=>visual.test(value)),...items.filter((value)=>interaction.test(value)),...items.filter((value)=>!visual.test(value)&&!interaction.test(value))]);
+  }
+  function cardLabels(item) {
+    const patterns = cardPatternItems(item);
+    const brandTokens = new Set(item.name.toLocaleLowerCase().split(/[^\p{L}\p{N}]+/u).filter(Boolean));
+    const patternTokens = new Set(patterns.map((value)=>value.toLocaleLowerCase()));
+    const topics = uniqueInOrder(item.tags).filter((tag)=>!brandTokens.has(tag.toLocaleLowerCase())&&tag.toLocaleLowerCase()!==item.website_type.toLocaleLowerCase()&&!patternTokens.has(tag.toLocaleLowerCase())).sort((a,b)=>b.trim().split(/\s+/).length-a.trim().split(/\s+/).length||a.localeCompare(b,"en"));
+    const selected = [], seen = new Set();
+    const add = (values)=>values.forEach((value)=>{const key=value.toLocaleLowerCase();if(!seen.has(key)&&selected.length<4){seen.add(key);selected.push(value);}});
+    add(patterns.slice(0,2));
+    add(topics.slice(0,2));
+    add(patterns.slice(2));
+    add(topics.slice(2));
+    return selected;
   }
   function cardHTML(item,index) {
     const screenshot = escapeHTML(item.screenshot[0]);
     const styles = item.design_styles.slice(0,2).map(escapeHTML).join(" / ") || "Unclassified";
-    const tags = uniq([...casePatterns(item),...item.tags]).slice(0,4).map((pattern)=>`<span class="card-tag">${escapeHTML(pattern)}</span>`).join("");
-    const demo = item.tags.includes("demo") ? " · DEMO" : "";
-    return `<article class="case-card" data-case-id="${escapeHTML(item.id)}" tabindex="0" role="button" aria-label="Study ${escapeHTML(item.name)}"><div class="screenshot-frame"><img src="${screenshot}" alt="${escapeHTML(item.name)} website screenshot" loading="lazy" data-image-fallback><span class="image-index">CASE ${String(index+1).padStart(2,"0")}${demo}</span><span class="image-open" aria-hidden="true">↗</span></div><div class="card-info"><div class="card-title-line"><h3>${escapeHTML(item.name)}</h3><span class="card-type">${escapeHTML(item.website_type)}</span></div><p class="card-style">${styles}</p><div class="card-tags">${tags}</div></div></article>`;
+    const tags = cardLabels(item).map((pattern)=>`<span class="card-tag">${escapeHTML(pattern)}</span>`).join("");
+    const demo = item.tags.includes("demo") ? " · 示範" : "";
+    return `<article class="case-card" data-case-id="${escapeHTML(item.id)}" tabindex="0" role="button" aria-label="查看 ${escapeHTML(item.name)} 案例分析"><div class="screenshot-frame"><img src="${screenshot}" alt="${escapeHTML(item.name)} 網站截圖" loading="lazy" data-image-fallback><span class="image-index">案例 ${String(index+1).padStart(2,"0")}${demo}</span><span class="image-open" aria-hidden="true">↗</span></div><div class="card-info"><div class="card-title-line"><h3>${escapeHTML(item.name)}</h3><span class="card-type">${escapeHTML(item.website_type)}</span></div><p class="card-style">${styles}</p><div class="card-tags">${tags}</div></div></article>`;
   }
   function showState(message) { const node = $("#page-state"); node.textContent = message; node.hidden = false; }
   function hideState() { $("#page-state").hidden = true; }
-  function detailList(items) { return items.length ? `<ul>${items.map((item)=>`<li>${escapeHTML(item)}</li>`).join("")}</ul>` : `<p class="muted-copy">No notes recorded.</p>`; }
+  function detailList(items) { return items.length ? `<ul>${items.map((item)=>`<li>${escapeHTML(item)}</li>`).join("")}</ul>` : `<p class="muted-copy">尚無紀錄。</p>`; }
   function section(title,content,extra="") { return `<section class="modal-section ${extra}"><h3>${escapeHTML(title)}</h3>${content}</section>`; }
   function renderPattern(pattern) {
-    return `<article class="pattern-card"><h4>${escapeHTML(pattern.name)}</h4><p>${escapeHTML(pattern.description)}</p><div class="pattern-fields"><div><strong>BEST FOR</strong><span>${escapeHTML(pattern.best_for || "Not specified")}</span></div><div><strong>ADVANTAGES</strong>${detailList(pattern.advantages)}</div><div><strong>LIMITATIONS</strong>${detailList(pattern.limitations)}</div></div></article>`;
+    return `<article class="pattern-card"><h4>${escapeHTML(pattern.name)}</h4><p>${escapeHTML(pattern.description)}</p><div class="pattern-fields"><div><strong>適用於</strong><span>${escapeHTML(pattern.best_for || "未註明")}</span></div><div><strong>優勢</strong>${detailList(pattern.advantages)}</div><div><strong>限制</strong>${detailList(pattern.limitations)}</div></div></article>`;
   }
   function renderScreenshotViewer(item, index) {
     const screenshots = item.screenshot;
     const current = Math.max(0, Math.min(index, screenshots.length - 1));
-    const controls = screenshots.length > 1 ? `<button class="screenshot-nav screenshot-nav-prev" type="button" data-screenshot-step="-1" aria-label="Previous screenshot">←</button><button class="screenshot-nav screenshot-nav-next" type="button" data-screenshot-step="1" aria-label="Next screenshot">→</button><span class="screenshot-counter" aria-live="polite">${String(current + 1).padStart(2,"0")} / ${String(screenshots.length).padStart(2,"0")}</span>` : "";
+    const controls = screenshots.length > 1 ? `<button class="screenshot-nav screenshot-nav-prev" type="button" data-screenshot-step="-1" aria-label="上一張截圖">←</button><button class="screenshot-nav screenshot-nav-next" type="button" data-screenshot-step="1" aria-label="下一張截圖">→</button><span class="screenshot-counter" aria-live="polite">${String(current + 1).padStart(2,"0")} / ${String(screenshots.length).padStart(2,"0")}</span>` : "";
     const points = item.screenshot_highlights.filter((point)=>point.screenshot_index === current);
     const markers = points.map((point,index)=>`<span class="highlight-marker" style="left:${point.x}%;top:${point.y}%" aria-hidden="true">${index + 1}</span>`).join("");
     const notes = points.length ? `<ol class="highlight-notes">${points.map((point,index)=>`<li><span class="highlight-number">${index + 1}</span><div><strong>${escapeHTML(point.label)}</strong><p>${escapeHTML(point.description)}</p></div></li>`).join("")}</ol>` : "";
-    return `<div class="modal-image-viewer${screenshots.length > 1 ? " has-multiple" : ""}" data-screenshot-viewer data-case-id="${escapeHTML(item.id)}" data-index="${current}"><div class="screenshot-stage"><img class="modal-hero-image" src="${escapeHTML(screenshots[current])}" alt="${escapeHTML(item.name)} website screenshot ${current + 1} of ${screenshots.length}" data-image-fallback>${markers}</div>${controls}${notes}</div>`;
+    return `<div class="modal-image-viewer${screenshots.length > 1 ? " has-multiple" : ""}" data-screenshot-viewer data-case-id="${escapeHTML(item.id)}" data-index="${current}"><div class="screenshot-stage"><img class="modal-hero-image" src="${escapeHTML(screenshots[current])}" alt="${escapeHTML(item.name)} 網站截圖，第 ${current + 1} 張，共 ${screenshots.length} 張" data-image-fallback>${markers}</div>${controls}${notes}</div>`;
   }
   function stepScreenshot(viewer, direction) {
     const item = state.cases.find((entry)=>entry.id === viewer.dataset.caseId);
@@ -99,13 +119,13 @@
     const styles = item.design_styles.map((style)=>`<span class="taxonomy-chip">${escapeHTML(style)}</span>`).join("");
     const tags = item.tags.map((tag)=>`<span class="card-tag">${escapeHTML(tag)}</span>`).join("");
     const analysis = item.analysis;
-    $("#modal-body").innerHTML = `<div class="modal-body"><div class="modal-heading"><div><p class="modal-kicker">CASE STUDY&nbsp; / &nbsp;${escapeHTML(item.id.toUpperCase())}</p><h2 id="modal-title">${escapeHTML(item.name)}</h2></div>${url ? `<a class="modal-url" href="${escapeHTML(url)}" target="_blank" rel="noopener noreferrer">${escapeHTML(item.url)} ↗</a>` : ""}</div>${demo ? `<div class="demo-banner">SYNTHETIC DEMO — illustrative UI, not a real website analysis.</div>` : ""}${renderScreenshotViewer(item,0)}<div class="modal-taxonomy"><span class="taxonomy-chip type-chip">${escapeHTML(item.website_type)}</span>${styles}</div>${section("Design Overview",`<p>${escapeHTML(analysis.overview || "No analysis recorded.")}</p>`)}<div class="analysis-grid">${section("Color System",`<p>${escapeHTML(analysis.color_system || "No analysis recorded.")}</p>`)}${section("Typography",`<p>${escapeHTML(analysis.typography || "No analysis recorded.")}</p>`)}${section("Layout",`<p>${escapeHTML(analysis.layout || "No analysis recorded.")}</p>`)}${section("Navigation",`<p>${escapeHTML(analysis.navigation || "No analysis recorded.")}</p>`)}${section("CTA",`<p>${escapeHTML(analysis.cta || "No analysis recorded.")}</p>`)}${section("Interaction",`<p>${escapeHTML(analysis.interaction || "No analysis recorded.")}</p>`)}${section("Information Hierarchy",`<p>${escapeHTML(analysis.information_hierarchy || "No analysis recorded.")}</p>`)}</div>${section("UX Strengths",detailList(item.ux_strengths),"list-section")}${section("Potential Issues",detailList(item.potential_issues),"list-section")}${section("Reusable Patterns",item.reusable_patterns.length ? `<div class="pattern-list">${item.reusable_patterns.map(renderPattern).join("")}</div>` : `<p>No reusable patterns recorded.</p>`)}${section("Best For / Use Cases",detailList(item.use_cases),"list-section")}${section("Components",detailList(item.components),"list-section")}<section class="modal-section"><h3>TAGS</h3><div class="modal-tags">${tags || "—"}</div></section><div class="modal-footer">${url ? `<a class="visit-link" href="${escapeHTML(url)}" target="_blank" rel="noopener noreferrer">Visit website <span aria-hidden="true">↗</span></a>` : ""}</div></div>`;
+    $("#modal-body").innerHTML = `<div class="modal-body"><div class="modal-heading"><div><p class="modal-kicker">案例分析&nbsp; / &nbsp;${escapeHTML(item.id.toUpperCase())}</p><h2 id="modal-title">${escapeHTML(item.name)}</h2></div>${url ? `<a class="modal-url" href="${escapeHTML(url)}" target="_blank" rel="noopener noreferrer">${escapeHTML(item.url)} ↗</a>` : ""}</div>${demo ? `<div class="demo-banner">示範案例 — 僅供介面展示，非真實網站分析。</div>` : ""}${renderScreenshotViewer(item,0)}<div class="modal-taxonomy"><span class="taxonomy-chip type-chip">${escapeHTML(item.website_type)}</span>${styles}</div>${section("設計總覽",`<p>${escapeHTML(analysis.overview || "尚無分析紀錄。")}</p>`)}<div class="analysis-grid">${section("色彩系統",`<p>${escapeHTML(analysis.color_system || "尚無分析紀錄。")}</p>`)}${section("字體排版",`<p>${escapeHTML(analysis.typography || "尚無分析紀錄。")}</p>`)}${section("版面配置",`<p>${escapeHTML(analysis.layout || "尚無分析紀錄。")}</p>`)}${section("導覽",`<p>${escapeHTML(analysis.navigation || "尚無分析紀錄。")}</p>`)}${section("CTA",`<p>${escapeHTML(analysis.cta || "尚無分析紀錄。")}</p>`)}${section("互動",`<p>${escapeHTML(analysis.interaction || "尚無分析紀錄。")}</p>`)}${section("資訊層級",`<p>${escapeHTML(analysis.information_hierarchy || "尚無分析紀錄。")}</p>`)}</div>${section("UX 優勢",detailList(item.ux_strengths),"list-section")}${section("潛在問題",detailList(item.potential_issues),"list-section")}${section("可重用 Pattern",item.reusable_patterns.length ? `<div class="pattern-list">${item.reusable_patterns.map(renderPattern).join("")}</div>` : `<p>尚無可重用 Pattern 紀錄。</p>`)}${section("適用情境",detailList(item.use_cases),"list-section")}${section("UI 元件",detailList(item.components),"list-section")}<section class="modal-section"><h3>Tags</h3><div class="modal-tags">${tags || "—"}</div></section><div class="modal-footer">${url ? `<a class="visit-link" href="${escapeHTML(url)}" target="_blank" rel="noopener noreferrer">造訪網站 <span aria-hidden="true">↗</span></a>` : ""}</div></div>`;
     const dialog = $("#case-modal");
     if (!dialog.open) dialog.showModal();
   }
   grid.addEventListener("click",(event)=>{const card=event.target.closest("[data-case-id]");if(card)openModal(card.dataset.caseId);});
   grid.addEventListener("keydown",(event)=>{const card=event.target.closest("[data-case-id]");if(card&&["Enter"," "].includes(event.key)){event.preventDefault();openModal(card.dataset.caseId);}});
-  document.addEventListener("error",(event)=>{if(event.target.matches?.("img[data-image-fallback]")){const placeholder=document.createElement("div");placeholder.className=event.target.classList.contains("modal-hero-image")?"image-placeholder modal-image-placeholder":"image-placeholder";placeholder.setAttribute("role","img");placeholder.setAttribute("aria-label",`${event.target.alt} (image unavailable)`);placeholder.textContent="SCREENSHOT UNAVAILABLE";event.target.replaceWith(placeholder);}},{capture:true});
+  document.addEventListener("error",(event)=>{if(event.target.matches?.("img[data-image-fallback]")){const placeholder=document.createElement("div");placeholder.className=event.target.classList.contains("modal-hero-image")?"image-placeholder modal-image-placeholder":"image-placeholder";placeholder.setAttribute("role","img");placeholder.setAttribute("aria-label",`${event.target.alt}（截圖無法顯示）`);placeholder.textContent="截圖無法顯示";event.target.replaceWith(placeholder);}},{capture:true});
   $("#modal-body").addEventListener("click",(event)=>{const button=event.target.closest("[data-screenshot-step]");if(button){const viewer=button.closest("[data-screenshot-viewer]");if(viewer)stepScreenshot(viewer,Number(button.dataset.screenshotStep));}});
   $("#case-modal").addEventListener("keydown",(event)=>{if(!["ArrowLeft","ArrowRight"].includes(event.key))return;const viewer=$("[data-screenshot-viewer].has-multiple");if(!viewer)return;event.preventDefault();stepScreenshot(viewer,event.key==="ArrowRight"?1:-1);});
   $("#modal-close").addEventListener("click",()=>$("#case-modal").close());

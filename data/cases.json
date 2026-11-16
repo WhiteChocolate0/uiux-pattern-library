@@ -1,0 +1,141 @@
+[
+  {
+    "id": "demo-interface",
+    "name": "Demo Interface (Fictional)",
+    "url": "https://example.com",
+    "screenshot": "assets/screenshots/demo-interface.svg",
+    "website_type": "SaaS",
+    "design_styles": ["Dark", "Minimal", "Developer-focused"],
+    "analysis": {
+      "overview": "Synthetic sample only. The supplied illustration uses a dark project workspace with a compact navigation rail, a central task list, and a right-side detail panel. No real product was inspected.",
+      "color_system": "The mockup uses a near-black canvas with low-contrast separators and a lime accent on selected states. In this illustration, reserving the accent for status and selection helps distinguish active information from the neutral workspace.",
+      "typography": "The mockup pairs compact sans-serif interface labels with a larger page heading. This scale contrast may help separate navigation metadata from the primary workspace title.",
+      "layout": "A three-column workspace places navigation, task content, and contextual details side by side. This can reduce context switching for dense project work, while requiring careful width management on smaller screens.",
+      "navigation": "A narrow icon rail provides persistent section access and a text label identifies the active location. Icon-only destinations may be less discoverable without labels or tooltips.",
+      "cta": "A single filled accent button marks the main create action; secondary controls remain subdued. This hierarchy can make the next action easier to scan without giving every control equal emphasis.",
+      "interaction": "The illustration shows selected navigation and task states, but no real interaction was tested. The visual states imply how a production interface could communicate current context.",
+      "information_hierarchy": "Workspace title and task names use the strongest type contrast; metadata and timestamps recede. This supports scanning task names before secondary details in the pictured list."
+    },
+    "components": ["Sidebar", "Navigation", "Cards", "Status Tags", "Detail Panel"],
+    "ux_strengths": [
+      "The persistent navigation rail and neighboring detail panel keep primary context visible in the synthetic workspace.",
+      "Muted metadata and a restrained accent distinguish task names and active states in the illustrated list."
+    ],
+    "potential_issues": [
+      "In the illustrated narrow navigation rail, icon-only destinations may be harder to identify for first-time users unless labels are available.",
+      "A three-column workspace may compress the central task list on smaller screens if the detail panel remains open."
+    ],
+    "reusable_patterns": [
+      {
+        "name": "Persistent context rail",
+        "description": "Keep primary destinations in a compact persistent rail while the main workspace and contextual detail remain in view. The illustration suggests a way to preserve location across related tasks.",
+        "best_for": "Desktop tools with a small set of stable top-level areas and frequent movement between records.",
+        "advantages": ["Maintains navigation context while content changes.", "Uses a consistent location for primary destinations."],
+        "limitations": ["Icon-only labels can reduce discoverability.", "The rail consumes width on compact viewports."]
+      },
+      {
+        "name": "Inline record detail panel",
+        "description": "Show selected-record context beside a list so users can inspect an item while retaining the surrounding collection.",
+        "best_for": "Desktop workflows where users compare or triage multiple records in sequence.",
+        "advantages": ["Keeps the originating list visible during inspection.", "Can reduce repeated back-and-forth navigation."],
+        "limitations": ["A persistent panel can narrow the primary list.", "Small screens may need a stacked or full-screen detail treatment."]
+      }
+    ],
+    "use_cases": ["Illustrative reference for desktop project tools with task triage workflows.", "A starting point for exploring persistent navigation and adjacent record details."],
+    "tags": ["demo", "workspace", "task management", "dark interface"],
+    "created_at": "2026-11-16"
+  },
+  {
+    "id": "nike-taiwan-homepage",
+    "name": "Nike Taiwan Homepage",
+    "url": "https://www.nike.com/tw/",
+    "screenshot": "assets/screenshots/nike01.png",
+    "website_type": "E-commerce",
+    "design_styles": [
+      "Minimal",
+      "Editorial"
+    ],
+    "analysis": {
+      "overview": "首頁以多層全站導覽、優惠資訊與大型運動形象主視覺組成。桌面截圖中，寬幅跑步 campaign 佔據主要畫面，粗體標題疊在影像下方；網站首頁內容亦包含多張 campaign slide、商品主題與選購區塊。這種編排將品牌故事與商品探索放在同一個入口。",
+      "color_system": "導覽與促銷區使用白色及淺灰底搭配黑色文字，形成清楚、克制的商品導覽基底；主視覺則以低明度藍灰運動影像和白色標題形成強烈明暗對比。將品牌影像色彩集中於主視覺，能讓首頁其他導覽資訊維持中性層級。",
+      "typography": "導覽項目採粗黑無襯線字，主視覺標題使用大尺寸、厚字重白字。尺寸與字重差異使 campaign 標題在影像中成為明確焦點；優惠與說明文字則維持較小尺寸，作為補充資訊。",
+      "layout": "首頁以橫向分層排列：頂部服務連結、商品類別導覽、優惠資訊帶，再接全幅 campaign 影像與後續商品探索模組。各層將站務操作、商品導覽與品牌內容分開；但多層頂部區域也會占用首屏高度。",
+      "navigation": "畫面可見頂部服務入口與第二層商品類別導覽，並提供搜尋、收藏及購物袋入口。這種分層方式把帳戶／服務功能與商品分類分置於不同區域，適合商品類別多且常用工具固定的商店。",
+      "cta": "主視覺同時提供「選購」與「探索」兩種入口，分別對應直接進入商品和繼續瀏覽 campaign 的意圖。讓行動入口與形象內容相鄰，可能有助於把品牌敘事接到購物路徑；首頁優惠區亦提供查看優惠商品的連結。",
+      "interaction": "Nike 首頁標示主視覺為 3 張投影片，頁面其他區域亦以多項商品與運動類別模組呈現。此頁面檢視未驗證輪播的操作方式或鍵盤支援，因此不對其控制行為作結論。",
+      "information_hierarchy": "商品導覽和優惠資訊先提供快速入口，接著以大型運動影像和標題建立 campaign 焦點，再引導使用者選購或探索。首屏視覺優先權明確，但 campaign 影像與多層導覽也使直接商品清單需要向下瀏覽。"
+    },
+    "components": [
+      "Utility Navigation",
+      "Category Navigation",
+      "Search",
+      "Promotional Banner",
+      "Hero Carousel",
+      "Campaign CTA",
+      "Product Carousel"
+    ],
+    "ux_strengths": [
+      "服務連結、商品類別與搜尋／收藏／購物袋入口各有固定區域，讓常用導覽工具能與 campaign 內容並存。",
+      "主視覺將運動影像、簡短標題和「選購／探索」入口結合，提供品牌敘事與明確後續路徑。",
+      "優惠資訊在首頁前段呈現，可讓訪客先看到促銷與免運門檻等購物條件。"
+    ],
+    "potential_issues": [
+      "頂部服務列、商品導覽與優惠資訊帶連續占用垂直空間；在較矮的視窗或行動裝置上，可能壓縮首屏內可見的商品內容。",
+      "首頁以大型 campaign 影像優先呈現，想直接比較商品的訪客可能需要多向下瀏覽才能到達商品清單。"
+    ],
+    "reusable_patterns": [
+      {
+        "name": "Campaign 主視覺搭配雙路徑 CTA",
+        "description": "以大幅情境影像承載品牌主張，並在標題旁提供直接選購與延伸探索兩種入口。此模式把情感導向的品牌內容連接至不同深度的購物意圖。",
+        "best_for": "需要同時呈現季節 campaign、品牌故事與商品入口的零售首頁或活動 Landing Page。",
+        "advantages": [
+          "以高辨識度影像快速建立單一 campaign 焦點。",
+          "讓準備購買與想繼續了解內容的訪客各有入口。"
+        ],
+        "limitations": [
+          "大型主視覺會占用首屏高度，可能延後商品比較入口。",
+          "若標題、影像焦點與 CTA 排列未經響應式調整，小螢幕可能難以同時保留清楚的閱讀層級。"
+        ]
+      },
+      {
+        "name": "服務列與商品分類分層導覽",
+        "description": "將協助／帳戶等全站服務入口放在獨立工具列，再以另一層列出主要商品分類，並固定搜尋、收藏與購物袋等商店工具。",
+        "best_for": "商品分類較多、且訪客會頻繁使用搜尋、收藏或購物袋的電商網站。",
+        "advantages": [
+          "將全站服務與商品瀏覽任務分開，降低單一導覽列承載過多不同功能的情況。",
+          "常用商店工具可在主要商品分類旁維持一致位置。"
+        ],
+        "limitations": [
+          "多層導覽會增加頁首高度。",
+          "類別與工具項目增加時，桌面版可能需要更嚴謹的寬度管理，行動版也需要重新安排導覽層級。"
+        ]
+      },
+      {
+        "name": "首屏優惠資訊帶",
+        "description": "在主視覺前用獨立橫幅呈現主要折扣或免運條件，並提供通往優惠商品的連結，讓購物條件與品牌 campaign 各自保有位置。",
+        "best_for": "有明確期間促銷、免運門檻或全站購物條件，且需要在進入商品分類前揭露的電商首頁。",
+        "advantages": [
+          "讓重要促銷條件較早進入訪客視線。",
+          "可直接連結至優惠商品，減少從促銷訊息到商品頁的尋找步驟。"
+        ],
+        "limitations": [
+          "促銷橫幅會增加頁首資訊量與垂直高度。",
+          "若文案或連結未及時更新，可能造成訪客對優惠內容的預期落差。"
+        ]
+      }
+    ],
+    "use_cases": [
+      "設計具有大型 campaign 故事與多種購物意圖入口的品牌電商首頁。",
+      "規劃服務入口、商品分類與商店工具並存的多層導覽。",
+      "在主視覺前揭露期間優惠或免運門檻的零售活動頁。"
+    ],
+    "tags": [
+      "Nike",
+      "sportswear",
+      "campaign",
+      "e-commerce",
+      "product discovery"
+    ],
+    "created_at": "2026-11-16"
+  }
+]

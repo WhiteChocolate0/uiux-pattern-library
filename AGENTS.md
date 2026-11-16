@@ -605,9 +605,30 @@ data/cases.json
 - 近黑色背景
 - 節制的 Accent Color
 - 明確 Typography Hierarchy
+- 繁體中文以 `Noto Sans TC` 作為主要中文字體 fallback；保留 Manrope、DM Sans、DM Mono 的英文層級。
 - 大量留白
 - Screenshot 為主要視覺
 - 卡片式探索
+- Hero 保留 Editorial 主視覺與大型標題，但高度應讓使用者能較快進入 Gallery。
+- About 區塊需清楚呈現「觀察 → 設計效果 → 可重用原則」分析方法，使用細線、留白與 Mono metadata，避免制式 SaaS 功能卡。
+
+### Typography / Readability
+
+- 一般正文（包含行動版）不得低於 `14px`，行距以 `1.75–1.9` 為原則。
+- Modal 正文與行動版 Modal Body 至少 `14px`；UX 優勢、潛在問題、適用情境等列表至少 `13px`，行距約 `1.8`。
+- Tag / Chip 原則上不得低於 `10px`；主要可見 Metadata 原則上不得低於 `9px`。
+- 卡片名稱應清楚高於 Metadata；Website Type、Design Style 與 Tag 必須有足夠對比。
+- Modal Section Title 約 `11–12px`；Pattern 名稱 `16–18px`、描述 `13–14px`，優勢與限制內容至少 `13px`。
+- Screenshot Highlight 標題與說明至少 `12px`，行距 `1.6–1.7`；編號至少 `10px`。
+- 不可為了 Editorial 風格犧牲閱讀性。行動版不得單純縮小文字解決版面問題，應優先換行、調整間距或改為堆疊排列。
+
+### Localization / Display Labels
+
+- Schema 與案例資料可保留英文受控詞彙；前台主要面向繁體中文使用者，應以繁體中文顯示名稱。
+- Website Type、Design Style、Components、UI Pattern 與常見 Tags 透過 `script.js` 的 Display Label Mapping 顯示中文；未知值保留原文。
+- Detail Modal 的 Website Type 與 Design Style 可採「中文 · English」並列；首頁卡片優先使用精簡中文。
+- Display Mapping 只改變呈現文字。Filter option 的 `value`、搜尋索引、資料值及比較邏輯都必須繼續使用 `cases.json` 原始值。
+- 不得為了前台中文化修改案例資料 Schema 或原始分類／標籤值。新增常見詞彙翻譯時，應同步更新共用 Mapping，不建立案例專用翻譯邏輯。
 
 避免：
 
@@ -644,19 +665,22 @@ data/cases.json
 4. Website Type
 5. Design Styles
 6. Design Overview
-7. Color System
-8. Typography
-9. Layout
-10. Navigation
-11. CTA
-12. Interaction
-13. Information Hierarchy
-14. UX Strengths
-15. Potential Issues
-16. Reusable Patterns
-17. Use Cases
-18. Tags
-19. Visit Website
+7. 可重用 Pattern
+8. 色彩系統
+9. 字體排版
+10. 版面配置
+11. 導覽
+12. CTA
+13. 互動
+14. 資訊層級
+15. UX 優勢
+16. 潛在問題
+17. 適用情境
+18. UI 元件
+19. Tags
+20. 造訪網站
+
+可重用 Pattern 是本專案的核心輸出，應緊接設計總覽呈現。每張 Pattern Card 使用共用樣式，依 `reusable_patterns` 陣列順序由前端產生 `PATTERN 01`、`PATTERN 02` 等編號，不得新增 Schema 欄位。卡片資訊順序為 Pattern Name、Description、適用於、優勢、限制。
 
 不得因為單一案例改變 Modal 結構。
 

@@ -4,6 +4,10 @@
   const $ = (selector, root = document) => root.querySelector(selector);
   const grid = $("#case-grid"), search = $("#search-input"), typeFilter = $("#type-filter"), styleFilter = $("#style-filter"), patternFilter = $("#pattern-filter");
   const state = {cases: [], query: "", type: "", style: "", pattern: ""};
+  const WEBSITE_TYPE_LABELS = {"SaaS":"SaaS","Portfolio":"作品集","E-commerce":"電商","Editorial":"編輯／內容","Landing Page":"登陸頁","Productivity":"生產力工具","AI Product":"AI 產品","Other":"其他"};
+  const DESIGN_STYLE_LABELS = {"Minimal":"極簡","Dark":"深色","Editorial":"編輯風格","Brutalist":"粗野主義","Playful":"活潑","Experimental":"實驗性","Corporate":"企業風格","Futuristic":"未來感","Developer-focused":"開發者導向"};
+  const UI_LABELS = {"Hero Carousel":"主視覺輪播","Campaign CTA":"活動 CTA","Product Hero":"產品主視覺","Dual CTA":"雙 CTA","Product Carousel":"商品輪播","Category Navigation":"分類導覽","Utility Navigation":"工具導覽","Promotional Banner":"促銷橫幅","Global Navigation":"全站導覽","Search":"搜尋","Sidebar":"側邊導覽","Command Palette":"指令面板","Campaign Mosaic":"活動拼貼","Product Feature Sections":"產品特色區塊","Product UI Preview":"產品介面預覽","Sign-up CTA":"註冊 CTA","Price CTA":"價格 CTA","Text Link":"文字連結","Carousel Control":"輪播控制","Customer Logo Row":"客戶 Logo 列","Highlighted Headline":"重點文字標題","Large Hero Statement":"大型主視覺標語","Pickup Field":"上車地點欄位","Drop-off Field":"下車地點欄位","Floating Booking CTA":"浮動預約 CTA","Ride Type Selector":"行程類型選擇","Service Navigation":"服務導覽","Region Selector":"地區選擇","Travel Photo Mosaic":"旅遊照片拼貼","campaign":"品牌活動","product discovery":"商品探索","AI workspace":"AI 工作空間","knowledge management":"知識管理","developer tools":"開發工具","e-commerce":"電商","product development":"產品開發","product hero":"產品主視覺","productivity":"生產力","project management":"專案管理","ride booking":"叫車預約","marketplace":"多邊平台","mobility":"移動服務","sportswear":"運動服飾"};
+  const displayLabel = (value, labels = UI_LABELS) => labels[value] || value;
   const escapeHTML = (value) => String(value ?? "").replace(/[&<>"']/g, (char) => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[char]));
   const safeHttpUrl = (value) => { try { const url = new URL(value); return ["http:","https:"].includes(url.protocol) ? url.href : ""; } catch { return ""; } };
   const uniq = (values) => [...new Set(values.filter((value) => typeof value === "string" && value.trim()))].sort((a,b) => a.localeCompare(b,"en"));
@@ -36,14 +40,14 @@
     }
   }
   function casePatterns(item) { return uniq([...item.components, ...item.reusable_patterns.map((pattern)=>pattern.name)]); }
-  function fillFilter(select, label, values) {
+  function fillFilter(select, label, values, labels) {
     const selected = select.value;
-    select.innerHTML = `<option value="">${escapeHTML(label)}</option>${values.map((value)=>`<option value="${escapeHTML(value)}">${escapeHTML(value)}</option>`).join("")}`;
+    select.innerHTML = `<option value="">${escapeHTML(label)}</option>${values.map((value)=>`<option value="${escapeHTML(value)}">${escapeHTML(labels ? displayLabel(value,labels) : displayLabel(value))}</option>`).join("")}`;
     if (values.includes(selected)) select.value = selected;
   }
   function buildFilters() {
-    fillFilter(typeFilter,"網站類型",uniq(state.cases.map((item)=>item.website_type)));
-    fillFilter(styleFilter,"設計風格",uniq(state.cases.flatMap((item)=>item.design_styles)));
+    fillFilter(typeFilter,"網站類型",uniq(state.cases.map((item)=>item.website_type)),WEBSITE_TYPE_LABELS);
+    fillFilter(styleFilter,"設計風格",uniq(state.cases.flatMap((item)=>item.design_styles)),DESIGN_STYLE_LABELS);
     fillFilter(patternFilter,"UI Pattern",uniq(state.cases.flatMap(casePatterns)));
   }
   function searchableText(item) {
@@ -85,17 +89,17 @@
   }
   function cardHTML(item,index) {
     const screenshot = escapeHTML(item.screenshot[0]);
-    const styles = item.design_styles.slice(0,2).map(escapeHTML).join(" / ") || "Unclassified";
-    const tags = cardLabels(item).map((pattern)=>`<span class="card-tag">${escapeHTML(pattern)}</span>`).join("");
+    const styles = item.design_styles.slice(0,2).map((style)=>escapeHTML(displayLabel(style,DESIGN_STYLE_LABELS))).join(" / ") || "未分類";
+    const tags = cardLabels(item).map((pattern)=>`<span class="card-tag">${escapeHTML(displayLabel(pattern))}</span>`).join("");
     const demo = item.tags.includes("demo") ? " · 示範" : "";
-    return `<article class="case-card" data-case-id="${escapeHTML(item.id)}" tabindex="0" role="button" aria-label="查看 ${escapeHTML(item.name)} 案例分析"><div class="screenshot-frame"><img src="${screenshot}" alt="${escapeHTML(item.name)} 網站截圖" loading="lazy" data-image-fallback><span class="image-index">案例 ${String(index+1).padStart(2,"0")}${demo}</span><span class="image-open" aria-hidden="true">↗</span></div><div class="card-info"><div class="card-title-line"><h3>${escapeHTML(item.name)}</h3><span class="card-type">${escapeHTML(item.website_type)}</span></div><p class="card-style">${styles}</p><div class="card-tags">${tags}</div></div></article>`;
+    return `<article class="case-card" data-case-id="${escapeHTML(item.id)}" tabindex="0" role="button" aria-label="查看 ${escapeHTML(item.name)} 案例分析"><div class="screenshot-frame"><img src="${screenshot}" alt="${escapeHTML(item.name)} 網站截圖" loading="lazy" data-image-fallback><span class="image-index">案例 ${String(index+1).padStart(2,"0")}${demo}</span><span class="image-open" aria-hidden="true">↗</span></div><div class="card-info"><div class="card-title-line"><h3>${escapeHTML(item.name)}</h3><span class="card-type">${escapeHTML(displayLabel(item.website_type,WEBSITE_TYPE_LABELS))}</span></div><p class="card-style">${styles}</p><div class="card-tags">${tags}</div></div></article>`;
   }
   function showState(message) { const node = $("#page-state"); node.textContent = message; node.hidden = false; }
   function hideState() { $("#page-state").hidden = true; }
   function detailList(items) { return items.length ? `<ul>${items.map((item)=>`<li>${escapeHTML(item)}</li>`).join("")}</ul>` : `<p class="muted-copy">尚無紀錄。</p>`; }
   function section(title,content,extra="") { return `<section class="modal-section ${extra}"><h3>${escapeHTML(title)}</h3>${content}</section>`; }
-  function renderPattern(pattern) {
-    return `<article class="pattern-card"><h4>${escapeHTML(pattern.name)}</h4><p>${escapeHTML(pattern.description)}</p><div class="pattern-fields"><div><strong>適用於</strong><span>${escapeHTML(pattern.best_for || "未註明")}</span></div><div><strong>優勢</strong>${detailList(pattern.advantages)}</div><div><strong>限制</strong>${detailList(pattern.limitations)}</div></div></article>`;
+  function renderPattern(pattern, index) {
+    return `<article class="pattern-card"><div class="pattern-card-heading"><span class="pattern-index">PATTERN ${String(index).padStart(2,"0")}</span><h4>${escapeHTML(displayLabel(pattern.name))}</h4></div><p class="pattern-description">${escapeHTML(pattern.description)}</p><div class="pattern-fields"><div class="pattern-best-for"><strong>適用於</strong><span>${escapeHTML(pattern.best_for || "未註明")}</span></div><div><strong>優勢</strong>${detailList(pattern.advantages)}</div><div><strong>限制</strong>${detailList(pattern.limitations)}</div></div></article>`;
   }
   function renderScreenshotViewer(item, index) {
     const screenshots = item.screenshot;
@@ -116,10 +120,10 @@
     const item = state.cases.find((entry)=>entry.id === id); if (!item) return;
     const url = safeHttpUrl(item.url);
     const demo = item.tags.includes("demo");
-    const styles = item.design_styles.map((style)=>`<span class="taxonomy-chip">${escapeHTML(style)}</span>`).join("");
-    const tags = item.tags.map((tag)=>`<span class="card-tag">${escapeHTML(tag)}</span>`).join("");
+    const styles = item.design_styles.map((style)=>`<span class="taxonomy-chip">${escapeHTML(displayLabel(style,DESIGN_STYLE_LABELS))}<span class="label-original">${escapeHTML(style)}</span></span>`).join("");
+    const tags = item.tags.map((tag)=>`<span class="card-tag">${escapeHTML(displayLabel(tag))}</span>`).join("");
     const analysis = item.analysis;
-    $("#modal-body").innerHTML = `<div class="modal-body"><div class="modal-heading"><div><p class="modal-kicker">案例分析&nbsp; / &nbsp;${escapeHTML(item.id.toUpperCase())}</p><h2 id="modal-title">${escapeHTML(item.name)}</h2></div>${url ? `<a class="modal-url" href="${escapeHTML(url)}" target="_blank" rel="noopener noreferrer">${escapeHTML(item.url)} ↗</a>` : ""}</div>${demo ? `<div class="demo-banner">示範案例 — 僅供介面展示，非真實網站分析。</div>` : ""}${renderScreenshotViewer(item,0)}<div class="modal-taxonomy"><span class="taxonomy-chip type-chip">${escapeHTML(item.website_type)}</span>${styles}</div>${section("設計總覽",`<p>${escapeHTML(analysis.overview || "尚無分析紀錄。")}</p>`)}<div class="analysis-grid">${section("色彩系統",`<p>${escapeHTML(analysis.color_system || "尚無分析紀錄。")}</p>`)}${section("字體排版",`<p>${escapeHTML(analysis.typography || "尚無分析紀錄。")}</p>`)}${section("版面配置",`<p>${escapeHTML(analysis.layout || "尚無分析紀錄。")}</p>`)}${section("導覽",`<p>${escapeHTML(analysis.navigation || "尚無分析紀錄。")}</p>`)}${section("CTA",`<p>${escapeHTML(analysis.cta || "尚無分析紀錄。")}</p>`)}${section("互動",`<p>${escapeHTML(analysis.interaction || "尚無分析紀錄。")}</p>`)}${section("資訊層級",`<p>${escapeHTML(analysis.information_hierarchy || "尚無分析紀錄。")}</p>`)}</div>${section("UX 優勢",detailList(item.ux_strengths),"list-section")}${section("潛在問題",detailList(item.potential_issues),"list-section")}${section("可重用 Pattern",item.reusable_patterns.length ? `<div class="pattern-list">${item.reusable_patterns.map(renderPattern).join("")}</div>` : `<p>尚無可重用 Pattern 紀錄。</p>`)}${section("適用情境",detailList(item.use_cases),"list-section")}${section("UI 元件",detailList(item.components),"list-section")}<section class="modal-section"><h3>Tags</h3><div class="modal-tags">${tags || "—"}</div></section><div class="modal-footer">${url ? `<a class="visit-link" href="${escapeHTML(url)}" target="_blank" rel="noopener noreferrer">造訪網站 <span aria-hidden="true">↗</span></a>` : ""}</div></div>`;
+    $("#modal-body").innerHTML = `<div class="modal-body"><div class="modal-heading"><div><p class="modal-kicker">案例分析&nbsp; / &nbsp;${escapeHTML(item.id.toUpperCase())}</p><h2 id="modal-title">${escapeHTML(item.name)}</h2></div>${url ? `<a class="modal-url" href="${escapeHTML(url)}" target="_blank" rel="noopener noreferrer">${escapeHTML(item.url)} ↗</a>` : ""}</div>${demo ? `<div class="demo-banner">示範案例 — 僅供介面展示，非真實網站分析。</div>` : ""}${renderScreenshotViewer(item,0)}<div class="modal-taxonomy"><span class="taxonomy-chip type-chip">${escapeHTML(displayLabel(item.website_type,WEBSITE_TYPE_LABELS))}<span class="label-original">${escapeHTML(item.website_type)}</span></span>${styles}</div>${section("設計總覽",`<p>${escapeHTML(analysis.overview || "尚無分析紀錄。")}</p>`)}${section("可重用 Pattern",item.reusable_patterns.length ? `<div class="pattern-list">${item.reusable_patterns.map((pattern,index)=>renderPattern(pattern,index+1)).join("")}</div>` : `<p>尚無可重用 Pattern 紀錄。</p>`)}<div class="analysis-grid">${section("色彩系統",`<p>${escapeHTML(analysis.color_system || "尚無分析紀錄。")}</p>`)}${section("字體排版",`<p>${escapeHTML(analysis.typography || "尚無分析紀錄。")}</p>`)}${section("版面配置",`<p>${escapeHTML(analysis.layout || "尚無分析紀錄。")}</p>`)}${section("導覽",`<p>${escapeHTML(analysis.navigation || "尚無分析紀錄。")}</p>`)}${section("CTA",`<p>${escapeHTML(analysis.cta || "尚無分析紀錄。")}</p>`)}${section("互動",`<p>${escapeHTML(analysis.interaction || "尚無分析紀錄。")}</p>`)}${section("資訊層級",`<p>${escapeHTML(analysis.information_hierarchy || "尚無分析紀錄。")}</p>`)}</div>${section("UX 優勢",detailList(item.ux_strengths),"list-section")}${section("潛在問題",detailList(item.potential_issues),"list-section")}${section("適用情境",detailList(item.use_cases),"list-section")}${section("UI 元件",detailList(item.components.map((value)=>displayLabel(value))),"list-section")}<section class="modal-section"><h3>Tags</h3><div class="modal-tags">${tags || "—"}</div></section><div class="modal-footer">${url ? `<a class="visit-link" href="${escapeHTML(url)}" target="_blank" rel="noopener noreferrer">造訪網站 <span aria-hidden="true">↗</span></a>` : ""}</div></div>`;
     const dialog = $("#case-modal");
     if (!dialog.open) dialog.showModal();
   }

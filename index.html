@@ -8,7 +8,7 @@
   <title>UI/UX Pattern Library｜網站設計案例分析庫</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&family=Noto+Sans+TC:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
   <script src="script.js" defer></script>
 </head>
@@ -16,7 +16,7 @@
   <header class="site-header">
     <a class="wordmark" href="#top" aria-label="UI/UX Pattern Library 首頁"><span class="wordmark-symbol">U<span>/</span></span><span>UI/UX PATTERN LIBRARY<span class="wordmark-sub"> FIELDNOTES / INTERFACE ARCHIVE</span></span></a>
     <nav class="header-nav" aria-label="主要導覽"><a href="#gallery">探索</a><a href="#about">關於案例庫</a></nav>
-    <span class="edition-label"><span class="status-dot"></span> 個人案例庫 <span class="edition-number">NO. 001</span></span>
+    <span class="edition-label"><span class="status-dot"></span> 個人案例庫 <span class="edition-number">· 持續更新</span></span>
   </header>
 
   <main id="top">
@@ -44,7 +44,15 @@
       <div class="page-state" id="page-state" role="status" hidden></div>
     </section>
 
-    <section class="about-section" id="about"><div class="about-index">觀察筆記<br><span>— 001</span></div><p>好的介面，來自一連串設計決策。<br><em>在這裡練習看見它們。</em></p><span class="about-symbol" aria-hidden="true">✳</span></section>
+    <section class="about-section" id="about" aria-labelledby="about-title">
+      <div class="about-intro"><div class="about-index">分析方法&nbsp; / &nbsp;METHOD</div><h2 id="about-title">好的介面，來自一連串設計決策。<br><em>在這裡練習看見它們。</em></h2><p>不只收藏畫面，也把觀察轉化成未來可應用的設計原則。</p></div>
+      <ol class="method-steps">
+        <li><span class="method-number">01 / OBSERVE</span><h3>觀察</h3><p>辨認畫面中實際存在的設計選擇。</p></li>
+        <li><span class="method-number">02 / EFFECT</span><h3>設計效果</h3><p>分析這些選擇可能如何影響理解、導覽與操作。</p></li>
+        <li><span class="method-number">03 / REUSE</span><h3>可重用原則</h3><p>整理成能應用在其他產品情境的 UI/UX Pattern。</p></li>
+      </ol>
+      <span class="about-symbol" aria-hidden="true">✳</span>
+    </section>
   </main>
   <footer class="site-footer"><a class="wordmark footer-wordmark" href="#top"><span class="wordmark-symbol">U<span>/</span></span><span>UI/UX PATTERN LIBRARY<span class="wordmark-sub"> FIELDNOTES / INTERFACE ARCHIVE</span></span></a><span>收藏介面 · 拆解模式</span><a href="#top">回到頂端 ↑</a></footer>
 

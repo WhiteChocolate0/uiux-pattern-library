@@ -113,7 +113,10 @@ assets/screenshots/
   "id": "linear",
   "name": "Linear",
   "url": "https://linear.app",
-  "screenshot": "assets/screenshots/linear.webp",
+  "screenshot": [
+    "assets/screenshots/linear-01.webp",
+    "assets/screenshots/linear-02.webp"
+  ],
 
   "website_type": "SaaS",
 
@@ -173,7 +176,7 @@ assets/screenshots/
 - `id` 必須唯一。
 - `id` 使用小寫 kebab-case。
 - `url` 必須為完整的 HTTP(S) 網址。
-- `screenshot` 使用相對於專案根目錄的路徑。
+- `screenshot` 必須是字串陣列，每個元素都是相對於專案根目錄的圖片路徑。至少提供一張；多張依首頁到下方或使用者提供的順序排列。
 - `created_at` 使用 `YYYY-MM-DD`。
 
 ---
@@ -191,7 +194,7 @@ assets/screenshots/
 
 ```text
 URL：https://linear.app
-Screenshot：assets/screenshots/linear.webp
+Screenshot：assets/screenshots/linear-01.webp
 ```
 
 使用者**不需要**另外提供：
@@ -217,7 +220,7 @@ Screenshot：assets/screenshots/linear.webp
 
 1. 完整閱讀 `AGENTS.md`。
 2. 檢查 `data/cases.json`，理解既有案例與分類慣例。
-3. 確認 Screenshot 路徑。
+3. 確認一個或多個 Screenshot 路徑，並記錄其展示順序。
 4. 讀取提供的 Screenshot，將其視為主要視覺分析依據。
 5. 若可存取網站 URL，可將網站內容作為補充證據。
 6. 依照本文件的分析規則進行 UI/UX 分析。
@@ -503,19 +506,15 @@ assets/screenshots/
 
 ### 命名
 
-優先使用：
+優先使用 `{id}-{序號兩位數}.webp`，例如：
 
 ```text
-{id}.webp
+linear-01.webp
+linear-02.webp
+notion-01.webp
 ```
 
-例如：
-
-```text
-linear.webp
-notion.webp
-stripe.webp
-```
+若單張素材或使用者已提供不同名稱／格式，保留既有檔名與格式，不要任意重新命名。
 
 若使用者提供素材為其他格式，也可以使用：
 
@@ -525,11 +524,16 @@ stripe.webp
 
 ### 路徑
 
-JSON 中使用相對路徑，例如：
+JSON 中使用相對路徑陣列，例如：
 
 ```json
-"screenshot": "assets/screenshots/linear.webp"
+"screenshot": [
+  "assets/screenshots/linear-01.webp",
+  "assets/screenshots/linear-02.webp"
+]
 ```
+
+順序即為檢視順序，Gallery 固定以第一張作封面；Modal 於多張時顯示左右控制與張數，支援循環切換及鍵盤左右鍵。單張時不顯示控制。載入端須暫時兼容舊版單一路徑字串，轉為單元素陣列後再驗證。
 
 ### 真實性
 
@@ -552,7 +556,7 @@ JSON 中使用相對路徑，例如：
 ## 15. 檔案命名規則
 
 - `id` 使用小寫 kebab-case。
-- Screenshot 檔名優先與 `id` 相同。
+- Screenshot 檔名優先採 `{id}-{序號兩位數}.{副檔名}`，並依展示順序編號。
 - 不可為每個 Case 建立獨立 HTML。
 - 不可為每個 Case 建立獨立 CSS。
 - 不可為每個 Case 建立獨立 JavaScript。
@@ -703,6 +707,8 @@ Schema 修改屬於全專案變更。
 
 > 新增一般案例不需要修改 `index.html`。
 
+修改 Screenshot Schema 時，需將所有既有字串路徑遷移為陣列；載入端可在遷移期間將舊字串正規化成單元素陣列，避免舊資料造成整站失效。
+
 ---
 
 ## 21. AI 修改規則
@@ -769,7 +775,7 @@ rel="noopener noreferrer"
 - Case 符合完整 Schema。
 - `id` 唯一。
 - URL 有效。
-- Screenshot Path 正確。
+- `screenshot` 是至少含一個有效路徑的字串陣列，所有 Screenshot Path 正確。
 
 ### Gallery
 
@@ -791,6 +797,7 @@ rel="noopener noreferrer"
 ### Modal
 
 - Detail Modal 可以正常開啟。
+- 多張 Screenshot 可用左右按鈕與鍵盤方向鍵切換，並正確顯示張數；單張時不顯示切換控制。
 - 所有可用分析內容正確呈現。
 - Modal 可以正常關閉。
 - 鍵盤操作正常。
@@ -836,7 +843,7 @@ rel="noopener noreferrer"
 請先閱讀 AGENTS.md，並依照規範新增以下網站案例：
 
 URL：https://example.com
-Screenshot：assets/screenshots/example.webp
+Screenshot：assets/screenshots/example-01.webp
 ```
 
 收到此類指令後，AI 必須自行完成：

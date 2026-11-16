@@ -1,55 +1,11 @@
 [
   {
-    "id": "demo-interface",
-    "name": "Demo Interface (Fictional)",
-    "url": "https://example.com",
-    "screenshot": "assets/screenshots/demo-interface.svg",
-    "website_type": "SaaS",
-    "design_styles": ["Dark", "Minimal", "Developer-focused"],
-    "analysis": {
-      "overview": "Synthetic sample only. The supplied illustration uses a dark project workspace with a compact navigation rail, a central task list, and a right-side detail panel. No real product was inspected.",
-      "color_system": "The mockup uses a near-black canvas with low-contrast separators and a lime accent on selected states. In this illustration, reserving the accent for status and selection helps distinguish active information from the neutral workspace.",
-      "typography": "The mockup pairs compact sans-serif interface labels with a larger page heading. This scale contrast may help separate navigation metadata from the primary workspace title.",
-      "layout": "A three-column workspace places navigation, task content, and contextual details side by side. This can reduce context switching for dense project work, while requiring careful width management on smaller screens.",
-      "navigation": "A narrow icon rail provides persistent section access and a text label identifies the active location. Icon-only destinations may be less discoverable without labels or tooltips.",
-      "cta": "A single filled accent button marks the main create action; secondary controls remain subdued. This hierarchy can make the next action easier to scan without giving every control equal emphasis.",
-      "interaction": "The illustration shows selected navigation and task states, but no real interaction was tested. The visual states imply how a production interface could communicate current context.",
-      "information_hierarchy": "Workspace title and task names use the strongest type contrast; metadata and timestamps recede. This supports scanning task names before secondary details in the pictured list."
-    },
-    "components": ["Sidebar", "Navigation", "Cards", "Status Tags", "Detail Panel"],
-    "ux_strengths": [
-      "The persistent navigation rail and neighboring detail panel keep primary context visible in the synthetic workspace.",
-      "Muted metadata and a restrained accent distinguish task names and active states in the illustrated list."
-    ],
-    "potential_issues": [
-      "In the illustrated narrow navigation rail, icon-only destinations may be harder to identify for first-time users unless labels are available.",
-      "A three-column workspace may compress the central task list on smaller screens if the detail panel remains open."
-    ],
-    "reusable_patterns": [
-      {
-        "name": "Persistent context rail",
-        "description": "Keep primary destinations in a compact persistent rail while the main workspace and contextual detail remain in view. The illustration suggests a way to preserve location across related tasks.",
-        "best_for": "Desktop tools with a small set of stable top-level areas and frequent movement between records.",
-        "advantages": ["Maintains navigation context while content changes.", "Uses a consistent location for primary destinations."],
-        "limitations": ["Icon-only labels can reduce discoverability.", "The rail consumes width on compact viewports."]
-      },
-      {
-        "name": "Inline record detail panel",
-        "description": "Show selected-record context beside a list so users can inspect an item while retaining the surrounding collection.",
-        "best_for": "Desktop workflows where users compare or triage multiple records in sequence.",
-        "advantages": ["Keeps the originating list visible during inspection.", "Can reduce repeated back-and-forth navigation."],
-        "limitations": ["A persistent panel can narrow the primary list.", "Small screens may need a stacked or full-screen detail treatment."]
-      }
-    ],
-    "use_cases": ["Illustrative reference for desktop project tools with task triage workflows.", "A starting point for exploring persistent navigation and adjacent record details."],
-    "tags": ["demo", "workspace", "task management", "dark interface"],
-    "created_at": "2026-11-16"
-  },
-  {
     "id": "nike-taiwan-homepage",
     "name": "Nike Taiwan Homepage",
     "url": "https://www.nike.com/tw/",
-    "screenshot": "assets/screenshots/nike01.png",
+    "screenshot": [
+      "assets/screenshots/nike01.png"
+    ],
     "website_type": "E-commerce",
     "design_styles": [
       "Minimal",
@@ -135,6 +91,103 @@
       "campaign",
       "e-commerce",
       "product discovery"
+    ],
+    "created_at": "2026-11-16"
+  },
+  {
+    "id": "apple-homepage",
+    "name": "Apple Homepage",
+    "url": "https://www.apple.com/",
+    "screenshot": [
+      "assets/screenshots/apple01.png",
+      "assets/screenshots/apple02.png"
+    ],
+    "website_type": "E-commerce",
+    "design_styles": [
+      "Minimal",
+      "Editorial"
+    ],
+    "analysis": {
+      "overview": "首頁以固定的全球產品導覽承接多個全幅 campaign 與產品展示模組。第一張截圖呈現節慶贈禮主視覺的分割式影像編排；第二張則顯示 iPhone Duo 產品區塊以置中標題、簡短文案、雙 CTA 與大幅產品影像組成。兩種模組共用清楚的內容層級，讓首頁能在品牌活動與產品介紹之間切換。",
+      "color_system": "全球導覽使用近黑底與淺色文字，讓產品分類和搜尋／購物袋圖示集中在單一高對比區域。內容區依 campaign 轉換色彩：節慶主視覺以粉、紅、橘等高彩度影像吸引注意；產品展示則採淺色背景、深色文字與藍色 CTA。將色彩變化限制在各內容模組，可在維持整體導覽一致的同時呈現不同產品情緒。",
+      "typography": "產品標題採大尺寸、粗字重無襯線字體，短副標緊接其下；CTA 使用較小字級並以按鈕區隔。這種尺度落差讓產品名稱先成為焦點，再由一句短文案和操作入口補足資訊。",
+      "layout": "頁面由固定頂部導覽與垂直堆疊的全幅內容模組構成。節慶區以多個直向影像面板圍繞中央文案，產品區則把文字與 CTA 置中、產品影像安排在其下方；下一個產品標題從視窗底部露出，提供頁面仍可向下探索的線索。大幅留白保留產品主體的視覺空間，但也讓每個模組占用較多首屏高度。",
+      "navigation": "兩張截圖都顯示深色水平全站導覽，列出主要產品類別，並在右側提供搜尋與購物袋入口。首頁截圖另外出現國家／地區選擇提示，可繼續或關閉。產品分類導覽與商店工具共用同一列，對產品線清楚的品牌商店而言，能提供固定的跨品類入口。",
+      "cta": "產品區將「Learn more」與「Buy」並列，並以實心藍色與外框樣式區分視覺強度；節慶主視覺則用單一「Shop gifts」按鈕。根據不同內容選擇單一或雙路徑 CTA，可分別支援探索型與直接購買型意圖。",
+      "interaction": "第一張截圖的主視覺右上方出現暫停圖示控制，顯示該區可能包含動態播放或輪播內容。靜態截圖無法驗證播放時序、控制行為或鍵盤操作，因此不對這些行為作進一步結論。",
+      "information_hierarchy": "全站產品導覽位於內容之前；每個產品模組再以大標題、簡短說明、CTA 與主體影像建立局部閱讀順序。固定導覽提供全站定位，各模組則各自建立單一產品焦點。由於首頁採垂直堆疊，後續產品需要向下瀏覽才能看到。"
+    },
+    "components": [
+      "Global Navigation",
+      "Search",
+      "Region Selector",
+      "Campaign Mosaic",
+      "Product Hero",
+      "Dual CTA",
+      "Product Feature Sections",
+      "Carousel Control"
+    ],
+    "ux_strengths": [
+      "兩張畫面都保留同一條產品導覽與商店工具列，讓使用者在瀏覽不同 campaign 或產品區塊時仍可回到主要分類與搜尋入口。",
+      "產品區以產品名稱、短副標、Learn more／Buy 兩種操作和產品影像形成明確順序，兼顧了解產品與直接購買兩種目的。",
+      "首頁不同模組可依產品或活動使用不同影像色彩，同時維持相近的標題與 CTA 結構，讓內容具有變化但仍可辨認為同一個商店。"
+    ],
+    "potential_issues": [
+      "全幅 campaign 與產品模組都占用大量垂直空間；想快速比較多項產品的訪客可能需要經過較長的捲動。",
+      "首頁截圖中的國家／地區提示位於全站導覽上方，可能在初次瀏覽時暫時遮擋部分主要內容並增加額外決策步驟。"
+    ],
+    "reusable_patterns": [
+      {
+        "name": "置中產品主視覺與雙路徑 CTA",
+        "description": "以置中的產品標題和一句價值描述建立焦點，接著提供了解更多與直接購買兩個入口，再以大幅產品影像延伸視覺敘事。",
+        "best_for": "產品型錄首頁或新品頁，當訪客可能需要先了解產品，也可能已準備購買時。",
+        "advantages": [
+          "標題、說明和產品圖聚焦於單一產品，閱讀順序容易辨識。",
+          "不同樣式的雙 CTA 可以同時容納探索與購買意圖。"
+        ],
+        "limitations": [
+          "大型影像與留白會占用首屏高度，並延後下一個產品模組的曝光。",
+          "若兩個 CTA 視覺差異不足，使用者可能不易辨識主要建議操作。"
+        ]
+      },
+      {
+        "name": "活動主視覺的分割影像拼貼",
+        "description": "使用多個相鄰影像面板展示產品或 campaign 的不同局部，並在中央保留簡短主張與主要行動按鈕。",
+        "best_for": "季節性促銷、贈禮指南或需要呈現多款產品氛圍的品牌活動首頁。",
+        "advantages": [
+          "多張影像可在同一個主視覺中呈現多樣的產品情境。",
+          "將文案集中在單一區域，可避免文字與每張商品圖各自競爭。"
+        ],
+        "limitations": [
+          "多個影像焦點可能分散注意力，中央標題需維持足夠對比與留白。",
+          "小螢幕需要重新安排影像與文案順序，否則主要訊息可能被壓縮。"
+        ]
+      },
+      {
+        "name": "固定全站產品導覽與商店工具",
+        "description": "將主要產品分類、搜尋與購物袋入口集中於頁面頂部的共用水平導覽，讓不同首頁內容模組仍共用相同的商店操作入口。",
+        "best_for": "產品品類明確、訪客可能跨品類探索的品牌電商網站。",
+        "advantages": [
+          "產品分類與常用商店工具有穩定且可預期的位置。",
+          "各產品活動頁可以沿用一致的全站導覽，不必重新建立主導航。"
+        ],
+        "limitations": [
+          "分類項目增加時，水平導覽可能難以在窄螢幕完整呈現。",
+          "若導覽固定在頂部，也會持續占用可供內容使用的視窗高度。"
+        ]
+      }
+    ],
+    "use_cases": [
+      "規劃同時服務產品探索與直接購買的品牌電商首頁。",
+      "以多款商品影像呈現季節活動或贈禮企劃。",
+      "建立可重複套用至不同產品的標題、短文案、雙 CTA 與主體影像模組。"
+    ],
+    "tags": [
+      "Apple",
+      "product discovery",
+      "product hero",
+      "e-commerce",
+      "campaign"
     ],
     "created_at": "2026-11-16"
   }

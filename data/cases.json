@@ -92,7 +92,8 @@
       "e-commerce",
       "product discovery"
     ],
-    "created_at": "2026-11-16"
+    "created_at": "2026-11-16",
+    "screenshot_highlights": []
   },
   {
     "id": "apple-homepage",
@@ -189,6 +190,29 @@
       "e-commerce",
       "campaign"
     ],
-    "created_at": "2026-11-16"
+    "created_at": "2026-11-16",
+    "screenshot_highlights": [
+      {
+        "screenshot_index": 0,
+        "x": 50,
+        "y": 86,
+        "label": "單一主要行動",
+        "description": "中央主標、補充文案與單一 CTA 集中在同一視覺軸線，讓節慶主題直接導向選購。"
+      },
+      {
+        "screenshot_index": 1,
+        "x": 50,
+        "y": 20,
+        "label": "標題與雙路徑 CTA",
+        "description": "產品名稱先建立焦點，再並列了解與購買入口，分別承接探索和直接購買意圖。"
+      },
+      {
+        "screenshot_index": 1,
+        "x": 50,
+        "y": 67,
+        "label": "產品情境主圖",
+        "description": "大量留白讓裝置示意成為視覺主體，並以畫面內容展示產品使用情境。"
+      }
+    ]
   }
 ]

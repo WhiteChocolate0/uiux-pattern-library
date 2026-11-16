@@ -9,11 +9,11 @@
   const uniq = (values) => [...new Set(values.filter((value) => typeof value === "string" && value.trim()))].sort((a,b) => a.localeCompare(b,"en"));
   const hasExactKeys = (value, keys) => value && typeof value === "object" && !Array.isArray(value) && Object.keys(value).length === keys.length && keys.every((key)=>Object.hasOwn(value,key));
   function validCase(item) {
-    const caseKeys = ["id","name","url","screenshot","website_type","design_styles","analysis","components","ux_strengths","potential_issues","reusable_patterns","use_cases","tags","created_at"];
+    const caseKeys = ["id","name","url","screenshot","screenshot_highlights","website_type","design_styles","analysis","components","ux_strengths","potential_issues","reusable_patterns","use_cases","tags","created_at"];
     const analysisKeys = ["overview","color_system","typography","layout","navigation","cta","interaction","information_hierarchy"];
     const patternKeys = ["name","description","best_for","advantages","limitations"];
     const stringArrays = ["design_styles","components","ux_strengths","potential_issues","use_cases","tags"];
-    return hasExactKeys(item,caseKeys) && typeof item.id === "string" && /^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(item.id) && typeof item.name === "string" && !!safeHttpUrl(item.url) && Array.isArray(item.screenshot) && item.screenshot.length > 0 && item.screenshot.every((path)=>typeof path === "string" && path.trim()) && typeof item.website_type === "string" && stringArrays.every((key)=>Array.isArray(item[key]) && item[key].every((value)=>typeof value === "string")) && hasExactKeys(item.analysis,analysisKeys) && analysisKeys.every((key)=>typeof item.analysis[key] === "string") && Array.isArray(item.reusable_patterns) && item.reusable_patterns.every((pattern)=>hasExactKeys(pattern,patternKeys) && ["name","description","best_for"].every((key)=>typeof pattern[key] === "string") && ["advantages","limitations"].every((key)=>Array.isArray(pattern[key]) && pattern[key].every((value)=>typeof value === "string"))) && /^\d{4}-\d{2}-\d{2}$/.test(item.created_at);
+    return hasExactKeys(item,caseKeys) && typeof item.id === "string" && /^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(item.id) && typeof item.name === "string" && !!safeHttpUrl(item.url) && Array.isArray(item.screenshot) && item.screenshot.length > 0 && item.screenshot.every((path)=>typeof path === "string" && path.trim()) && Array.isArray(item.screenshot_highlights) && item.screenshot_highlights.every((point)=>hasExactKeys(point,["screenshot_index","x","y","label","description"]) && Number.isInteger(point.screenshot_index) && point.screenshot_index >= 0 && point.screenshot_index < item.screenshot.length && [point.x,point.y].every((value)=>typeof value === "number" && value >= 0 && value <= 100) && typeof point.label === "string" && typeof point.description === "string") && typeof item.website_type === "string" && stringArrays.every((key)=>Array.isArray(item[key]) && item[key].every((value)=>typeof value === "string")) && hasExactKeys(item.analysis,analysisKeys) && analysisKeys.every((key)=>typeof item.analysis[key] === "string") && Array.isArray(item.reusable_patterns) && item.reusable_patterns.every((pattern)=>hasExactKeys(pattern,patternKeys) && ["name","description","best_for"].every((key)=>typeof pattern[key] === "string") && ["advantages","limitations"].every((key)=>Array.isArray(pattern[key]) && pattern[key].every((value)=>typeof value === "string"))) && /^\d{4}-\d{2}-\d{2}$/.test(item.created_at);
   }
   async function loadCases() {
     try {
@@ -21,7 +21,7 @@
       if (!response.ok) throw new Error(`Could not load ${CASES_URL} (${response.status})`);
       const data = await response.json();
       if (!Array.isArray(data)) throw new Error("cases.json must contain an array of cases.");
-      const normalized = data.map((item)=>typeof item?.screenshot === "string" ? {...item,screenshot:[item.screenshot]} : item);
+      const normalized = data.map((item)=>({...item,screenshot:typeof item?.screenshot === "string" ? [item.screenshot] : item?.screenshot,screenshot_highlights:item?.screenshot_highlights ?? []}));
       state.cases = normalized.filter(validCase);
       if (state.cases.length !== data.length) console.warn("Some invalid case records were skipped.");
       buildFilters();
@@ -81,7 +81,10 @@
     const screenshots = item.screenshot;
     const current = Math.max(0, Math.min(index, screenshots.length - 1));
     const controls = screenshots.length > 1 ? `<button class="screenshot-nav screenshot-nav-prev" type="button" data-screenshot-step="-1" aria-label="Previous screenshot">←</button><button class="screenshot-nav screenshot-nav-next" type="button" data-screenshot-step="1" aria-label="Next screenshot">→</button><span class="screenshot-counter" aria-live="polite">${String(current + 1).padStart(2,"0")} / ${String(screenshots.length).padStart(2,"0")}</span>` : "";
-    return `<div class="modal-image-viewer${screenshots.length > 1 ? " has-multiple" : ""}" data-screenshot-viewer data-case-id="${escapeHTML(item.id)}" data-index="${current}"><img class="modal-hero-image" src="${escapeHTML(screenshots[current])}" alt="${escapeHTML(item.name)} website screenshot ${current + 1} of ${screenshots.length}" data-image-fallback>${controls}</div>`;
+    const points = item.screenshot_highlights.filter((point)=>point.screenshot_index === current);
+    const markers = points.map((point,index)=>`<span class="highlight-marker" style="left:${point.x}%;top:${point.y}%" aria-hidden="true">${index + 1}</span>`).join("");
+    const notes = points.length ? `<ol class="highlight-notes">${points.map((point,index)=>`<li><span class="highlight-number">${index + 1}</span><div><strong>${escapeHTML(point.label)}</strong><p>${escapeHTML(point.description)}</p></div></li>`).join("")}</ol>` : "";
+    return `<div class="modal-image-viewer${screenshots.length > 1 ? " has-multiple" : ""}" data-screenshot-viewer data-case-id="${escapeHTML(item.id)}" data-index="${current}"><div class="screenshot-stage"><img class="modal-hero-image" src="${escapeHTML(screenshots[current])}" alt="${escapeHTML(item.name)} website screenshot ${current + 1} of ${screenshots.length}" data-image-fallback>${markers}</div>${controls}${notes}</div>`;
   }
   function stepScreenshot(viewer, direction) {
     const item = state.cases.find((entry)=>entry.id === viewer.dataset.caseId);

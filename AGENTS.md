@@ -117,6 +117,15 @@ assets/screenshots/
     "assets/screenshots/linear-01.webp",
     "assets/screenshots/linear-02.webp"
   ],
+  "screenshot_highlights": [
+    {
+      "screenshot_index": 0,
+      "x": 50,
+      "y": 35,
+      "label": "Primary action",
+      "description": "The CTA follows the headline in the same visual column."
+    }
+  ],
 
   "website_type": "SaaS",
 
@@ -177,6 +186,7 @@ assets/screenshots/
 - `id` 使用小寫 kebab-case。
 - `url` 必須為完整的 HTTP(S) 網址。
 - `screenshot` 必須是字串陣列，每個元素都是相對於專案根目錄的圖片路徑。至少提供一張；多張依首頁到下方或使用者提供的順序排列。
+- `screenshot_highlights` 是全案例共用的標註陣列，可為空；每筆含 `screenshot_index`（從 0 起）、`x`、`y`（相對截圖的 0–100 百分比）、`label`、`description`。
 - `created_at` 使用 `YYYY-MM-DD`。
 
 ---
@@ -535,6 +545,18 @@ JSON 中使用相對路徑陣列，例如：
 
 順序即為檢視順序，Gallery 固定以第一張作封面；Modal 於多張時顯示左右控制與張數，支援循環切換及鍵盤左右鍵。單張時不顯示控制。載入端須暫時兼容舊版單一路徑字串，轉為單元素陣列後再驗證。
 
+### 重點標註規則
+
+`screenshot_highlights` 用於在 Detail Modal 的截圖上標出可觀察的設計重點，並在圖下列出說明。
+
+- `screenshot_index` 對應 `screenshot` 陣列索引，從 0 開始。
+- `x`、`y` 是截圖上標記中心點的百分比，範圍為 0–100。
+- `label` 簡短命名視覺焦點；`description` 說明觀察與設計效果。
+- 標註必須能在該張截圖中直接核對，不可標示截圖未呈現的互動或功能。
+- 每張圖以 1–4 個重點為宜；沒有可靠重點時留空陣列，不得為了裝飾而添加。
+- 標記與圖下編號說明必須同步，使用同一順序。
+- 所有案例共用同一標記樣式與版面，不得為單一案例建立客製化標註元件。
+
 ### 真實性
 
 不可：
@@ -707,7 +729,7 @@ Schema 修改屬於全專案變更。
 
 > 新增一般案例不需要修改 `index.html`。
 
-修改 Screenshot Schema 時，需將所有既有字串路徑遷移為陣列；載入端可在遷移期間將舊字串正規化成單元素陣列，避免舊資料造成整站失效。
+修改 Screenshot Schema 時，需將所有既有字串路徑遷移為陣列；載入端可在遷移期間將舊字串正規化成單元素陣列，避免舊資料造成整站失效。新增 `screenshot_highlights` 等全案例欄位時，必須更新所有既有案例、驗證器、Modal 顯示與本文件；無標註案例使用空陣列。
 
 ---
 
@@ -776,11 +798,13 @@ rel="noopener noreferrer"
 - `id` 唯一。
 - URL 有效。
 - `screenshot` 是至少含一個有效路徑的字串陣列，所有 Screenshot Path 正確。
+- `screenshot_highlights` 使用固定格式；索引必須指向存在的截圖，座標必須介於 0–100。
 
 ### Gallery
 
 - 首頁正常顯示新案例。
 - Screenshot 正常顯示。
+- 若有重點標註，標記位置與圖下說明一致且可由截圖核對。
 - Website Type 與 Design Style 正確。
 
 ### Search

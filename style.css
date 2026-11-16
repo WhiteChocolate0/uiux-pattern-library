@@ -69,3 +69,11 @@ body{font-size:15px;line-height:1.8}
   .pattern-fields span,.pattern-fields ul{font-size:13px;line-height:1.8}
 }
 @media(max-width:600px){.taxonomy-chip{font-size:10px}}
+
+/* Project-wide readable type floor: no visible copy below 14px. */
+body{font-size:14px}
+.wordmark,.wordmark-sub,.wordmark-symbol,.header-nav a,.edition-label,.edition-number,.hero-topline,.hero-bottomline,.hero-index,.section-kicker,.hero-note-en,.text-link,.explore-aside,.search-control input,.search-control input::placeholder,kbd,.select-control select,.reset-button,.gallery-meta,.image-index,.card-title-line h3,.card-type,.card-style,.card-tag,.about-index,.method-number,.method-steps h3,.method-steps p,.footer-wordmark,.site-footer>span,.site-footer>a:last-child,.modal-kicker,.modal-url,.highlight-marker,.highlight-number,.highlight-notes strong,.highlight-notes p,.screenshot-counter,.taxonomy-chip,.modal-section h3,.modal-section p,.list-section ul,.pattern-index,.pattern-card h4,.pattern-card .pattern-description,.pattern-fields strong,.pattern-fields span,.pattern-fields ul,.visit-link,.demo-banner,.page-state,.image-placeholder{font-size:14px!important}
+@media(max-width:600px){
+  .wordmark,.header-nav a,.hero-topline,.hero-bottomline,.hero-index,.section-kicker,.gallery-meta,.image-index,.card-title-line h3,.card-type,.card-style,.card-tag,.about-index,.method-number,.method-steps h3,.method-steps p,.modal-kicker,.modal-url,.highlight-notes strong,.highlight-notes p,.screenshot-counter,.taxonomy-chip,.modal-section h3,.modal-section p,.list-section ul,.pattern-index,.pattern-card h4,.pattern-card .pattern-description,.pattern-fields strong,.pattern-fields span,.pattern-fields ul,.select-control select,.reset-button{font-size:14px!important}
+}
+.note-mark,.tiny-star,.gallery-note,.select-control>span:last-child,.footer-wordmark .wordmark-symbol{font-size:14px!important}

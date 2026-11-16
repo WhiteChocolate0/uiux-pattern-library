@@ -614,12 +614,11 @@ data/cases.json
 
 ### Typography / Readability
 
-- 一般正文（包含行動版）不得低於 `14px`，行距以 `1.75–1.9` 為原則。
-- Modal 正文與行動版 Modal Body 至少 `14px`；UX 優勢、潛在問題、適用情境等列表至少 `13px`，行距約 `1.8`。
-- Tag / Chip 原則上不得低於 `10px`；主要可見 Metadata 原則上不得低於 `9px`。
+- 所有前台可見文字（包含 Metadata、分類、Tag / Chip、按鈕、Highlight、Modal 小標與行動版文字）一律不得低於 `14px`。
+- 一般正文與 Modal 正文行距以 `1.75–1.9` 為原則；UX 優勢、潛在問題、適用情境等列表行距約 `1.8`。
 - 卡片名稱應清楚高於 Metadata；Website Type、Design Style 與 Tag 必須有足夠對比。
-- Modal Section Title 約 `11–12px`；Pattern 名稱 `16–18px`、描述 `13–14px`，優勢與限制內容至少 `13px`。
-- Screenshot Highlight 標題與說明至少 `12px`，行距 `1.6–1.7`；編號至少 `10px`。
+- Modal Section Title 至少 `14px`；Pattern 名稱可維持較大的標題層級，Pattern 描述、適用情境、優勢與限制不得低於 `14px`。
+- Screenshot Highlight 標題、說明與編號不得低於 `14px`，說明行距以 `1.6–1.8` 為原則。
 - 不可為了 Editorial 風格犧牲閱讀性。行動版不得單純縮小文字解決版面問題，應優先換行、調整間距或改為堆疊排列。
 
 ### Localization / Display Labels
